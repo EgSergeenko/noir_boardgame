@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Lobby</title>
+</head>
+<body>
+
+{% if user.is_authenticated %}
+    <p>Welcome, {{ user.get_username }}. Thanks for logging in.</p>
+{% else %}
+    <p>Welcome, new user. Please log in.</p>
+{% endif %}
+
+<form method="post">
+    {% csrf_token %}
+    <label for="inputRoomName" class="sr-only">Название</label>
+    <input type="text" id="inputRoomName" class="form-control" placeholder="Name" name="room_name"
+           value="" required="" autofocus="" data-cip-id="inputRoomName">
+
+    <label for="inputPlayersNumber" class="sr-only">Количество игроков</label>
+    <input type="number" id="inputPlayersNumber" class="form-control" placeholder="2" name="players_number"
+           value="" required="" autofocus="" data-cip-id="inputPlayersNumber">
+
+    <button type="submit">Создать</button>
+
+    {% for k, room in current_rooms.items %}
+        <p>Name: {{ room.name }}, expected_players: {{ room.expected_players }}
+            <a href="/{{ room.name }}">JOIN</a></p>
+    {% endfor %}
+</form>
+
+</body>
+</html>

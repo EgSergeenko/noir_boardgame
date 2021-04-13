@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Log in</title>
+</head>
+<body class="text-center" data-gr-c-s-loaded="true">
+
+
+<form method="post">
+    {% csrf_token %}
+    <h1 class="h3">Вход</h1>
+    <label for="inputEmail" class="sr-only">Email</label>
+    <input type="email" id="inputEmail" class="form-control" placeholder="Email" name="username"
+           value="" required="" autofocus="" data-cip-id="inputEmail">
+    <label for="inputPassword" class="sr-only">Password</label>
+    <input type="password" id="inputPassword" class="form-control" placeholder="Пароль"
+           name="password" required="" data-cip-id="inputPassword">
+
+
+    <button type="submit">Войти</button>
+    {% if wrong %}
+        <p style="color: red">Неправильный e-mail или пароль.</p>
+    {% endif %}
+    <p>Нет аккаунта?
+        <a href="#"> Создать аккаунт.</a></p>
+</form>
+
+</body>
+</html>
