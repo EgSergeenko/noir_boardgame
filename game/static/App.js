@@ -85,27 +85,52 @@ var GamePage = function (_React$Component3) {
         var _this3 = _possibleConstructorReturn(this, (GamePage.__proto__ || Object.getPrototypeOf(GamePage)).call(this, props));
 
         _this3.changeActionMod = _this3.changeActionMod.bind(_this3);
+        _this3.startGame = _this3.startGame.bind(_this3);
+        _this3.dummyMove = _this3.dummyMove.bind(_this3);
         _this3.state = {
             actionMod: "shift",
-            currentPlayerRole: "7"
+            currentPlayerRole: "7",
+            webSocket: null
         };
         return _this3;
     }
 
     _createClass(GamePage, [{
+        key: "startGame",
+        value: function startGame() {
+            if (this.state.webSocket != null) {
+                this.state.webSocket.send(JSON.stringify({
+                    'message_type': 'start_game_message',
+                    'message': 'start'
+                }));
+            }
+        }
+    }, {
+        key: "dummyMove",
+        value: function dummyMove() {
+            if (this.state.webSocket != null) {
+                this.state.webSocket.send(JSON.stringify({
+                    'message_type': 'turn_message',
+                    'message': 'move;left;0'
+                }));
+            }
+        }
+    }, {
         key: "componentDidMount",
         value: function componentDidMount() {
             var roomName = window.location.href.split('/').slice(-1)[0];
-            var chatSocket = new WebSocket("ws://" + window.location.host + "/ws/game/" + roomName + "/");
+            var gameSocket = new WebSocket("ws://" + window.location.host + "/ws/game/" + roomName + "/");
 
-            chatSocket.onmessage = function (e) {
+            gameSocket.onmessage = function (e) {
                 var data = JSON.parse(e.data);
                 console.log(data);
             };
-
-            chatSocket.onclose = function (e) {
+            gameSocket.onclose = function (e) {
                 console.error('Chat socket closed unexpectedly');
             };
+            this.setState({
+                webSocket: gameSocket
+            });
         }
     }, {
         key: "changeActionMod",
@@ -125,6 +150,16 @@ var GamePage = function (_React$Component3) {
                 React.createElement(
                     "main",
                     null,
+                    React.createElement(
+                        "button",
+                        { onClick: this.startGame },
+                        "start"
+                    ),
+                    React.createElement(
+                        "button",
+                        { onClick: this.dummyMove },
+                        "move"
+                    ),
                     React.createElement(
                         "div",
                         { className: "container-fluid" },

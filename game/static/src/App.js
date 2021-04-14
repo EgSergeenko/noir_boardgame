@@ -38,27 +38,49 @@ class GamePage extends React.Component {
     constructor(props) {
         super(props);
         this.changeActionMod = this.changeActionMod.bind(this);
+        this.startGame = this.startGame.bind(this);
+        this.dummyMove = this.dummyMove.bind(this);
         this.state = {
             actionMod: "shift",
             currentPlayerRole: "7",
+            webSocket: null,
         };
+    }
+
+    startGame() {
+        if (this.state.webSocket != null) {
+            this.state.webSocket.send(JSON.stringify({
+                'message_type': 'start_game_message',
+                'message': 'start',
+            }));
+        }
+    }
+
+    dummyMove() {
+        if (this.state.webSocket != null) {
+            this.state.webSocket.send(JSON.stringify({
+                'message_type': 'turn_message',
+                'message': 'move;left;0',
+            }));
+        }
     }
 
     componentDidMount() {
         let roomName = window.location.href.split('/').slice(-1)[0];
-        const chatSocket = new WebSocket(
+        let gameSocket = new WebSocket(
             "ws://" + window.location.host + "/ws/game/" + roomName + "/"
         );
 
-        chatSocket.onmessage = function (e) {
+        gameSocket.onmessage = function (e) {
             const data = JSON.parse(e.data);
             console.log(data);
         };
-
-        chatSocket.onclose = function (e) {
+        gameSocket.onclose = function (e) {
             console.error('Chat socket closed unexpectedly');
         };
-
+        this.setState({
+            webSocket: gameSocket
+        })
     }
 
     changeActionMod(newMode) {
@@ -76,6 +98,8 @@ class GamePage extends React.Component {
         return (
             <div>
                 <main>
+                    <button onClick={this.startGame}>start</button>
+                    <button onClick={this.dummyMove}>move</button>
                     <div className="container-fluid">
                         <div className="row">
                             <div className="col-md-2">

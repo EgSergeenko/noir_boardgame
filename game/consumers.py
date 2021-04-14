@@ -50,6 +50,10 @@ class GameConsumer(WebsocketConsumer):
         self.accept()
 
     def disconnect(self, close_code):
+        async_to_sync(self.channel_layer.group_discard)(
+            self.room_group_name,
+            self.channel_name
+        )
         current_rooms = cache.get('rooms')
         current_room = current_rooms[self.room_name]
         username = self.scope['user'].username
@@ -59,11 +63,6 @@ class GameConsumer(WebsocketConsumer):
             self.game_is_not_ready()
         current_rooms[self.room_name] = current_room
         cache.set('rooms', current_rooms, None)
-
-        async_to_sync(self.channel_layer.group_discard)(
-            self.room_group_name,
-            self.channel_name
-        )
 
         players = current_room.current_players
 
@@ -186,6 +185,7 @@ class GameConsumer(WebsocketConsumer):
     def game_info_message(self, event):
         game = cache.get('games')[self.room_name]
         message_type = event['type']
+        message = event['message']
         flat_board = [item for sublist in game.board for item in sublist]
         current_player_role = game.players_roles[self.scope['user'].username]
 
@@ -198,7 +198,7 @@ class GameConsumer(WebsocketConsumer):
                 'game_current_player': game.current_player,
                 'previous_move': game.previous_move,
                 'winner': game.winner,
-                'message': None
+                'message': message
             }
         ))
 
