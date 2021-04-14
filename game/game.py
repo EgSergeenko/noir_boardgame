@@ -30,10 +30,6 @@ NAMES = [
 ]
 
 
-# TODO
-# catch func
-# is win func
-
 class Game:
 
     def __init__(self, name, players):
@@ -61,8 +57,8 @@ class Game:
                     if card['name'] == role:
                         players.append(player)
 
-        message = f'{self.current_player} опрашивает {witness["name"]}.' \
-                  f' {"Он/Она никого не видел/a" if len(players) == 0 else "Игроки рядом: " + " ,".join(players)}.'
+        message = f'{self.current_player} interrogates {witness["name"]}.' \
+                  f' {"He/she saw nothing" if len(players) == 0 else "Players nearby: " + " ,".join(players)}.'
         self.current_player = next(self.players_order)
         self.previous_move = None
         return message
@@ -73,17 +69,17 @@ class Game:
             if card == role:
                 self.players_scores[self.current_player] += 1
                 self.board[row][column]['status'] = 0
-                message = f'{self.current_player} поймал {player} ({card})!'
+                message = f'{self.current_player} catches {player} ({card})!'
                 is_over, winner = self.__is_over()
                 if is_over:
                     self.winner = winner
-                    message = f'{self.current_player} поймал {player} ({card})! {self.winner} побеждает!'
+                    message = f'{self.current_player} catches {player} ({card})! {self.winner} wins!'
                     return message
                 self.__assign_new_role(player)
                 self.current_player = next(self.players_order)
                 self.previous_move = None
                 return message
-        message = f'{self.current_player} ловит {card}, но он оказывается мирным!'
+        message = f'{self.current_player} catches {card}, but he/she is innocent!'
         self.current_player = next(self.players_order)
         self.previous_move = None
         return message
@@ -103,7 +99,7 @@ class Game:
             for i in range(len(self.board) - 2, -1, -1):
                 self.board[i + 1][idx] = self.board[i][idx]
             self.board[0][idx] = tmp
-        message = f'{self.current_player} сдвигает поле.'
+        message = f'{self.current_player} moves the board.'
         self.previous_move = f'{direction};{idx}'
         self.current_player = next(self.players_order)
         return message

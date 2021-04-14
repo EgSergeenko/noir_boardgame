@@ -1,0 +1,11 @@
+{% extends 'game/base.html' %}
+{% block title %}
+    <title>{{ room_name }}</title>
+{% endblock %}
+{% block content %}
+    <div id="root"></div>
+    <script src="https://unpkg.com/react@17/umd/react.development.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js" crossorigin></script>
+    {% load static %}
+    <script src="{% static 'App.js' %}"></script>
+{% endblock %}

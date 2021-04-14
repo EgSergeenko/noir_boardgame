@@ -41,7 +41,7 @@ class GameConsumer(WebsocketConsumer):
             )
 
         elif current_room.get_players_number() == current_room.expected_players_number:
-            current_room.set_is_full(True)
+            current_room.is_full = True
             self.game_is_ready()
 
         current_rooms[self.room_name] = current_room
@@ -55,7 +55,7 @@ class GameConsumer(WebsocketConsumer):
         username = self.scope['user'].username
         current_room.remove_player(username)
         if current_room.is_full and not current_room.is_started:
-            current_room.set_is_full(False)
+            current_room.is_full = False
             self.game_is_not_ready()
         current_rooms[self.room_name] = current_room
         cache.set('rooms', current_rooms, None)
@@ -103,12 +103,6 @@ class GameConsumer(WebsocketConsumer):
             )
         elif text_data_json['message_type'] == 'turn_message':
             message = text_data_json['message']
-
-            #         парсинг действия и его применение
-            #   move;left;0
-            #   catch;row;column
-            #   interrogate;row;column
-
             games = cache.get('games')
             game = games[self.room_name]
 

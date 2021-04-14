@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta content="text/html; charset=utf-8" http-equiv="Content-Type"/>
+    <meta content="Sergeenko Egor / Sinichenko Konstantin" name="authors">
+    <meta content="Noir" name="description">
+    {% load static %}
+    <link href="{% static 'css/styles.css' %}" rel="stylesheet"/>
+    <link href="{% static 'css/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
+    {% block title %}
+    {% endblock %}
+</head>
+<body>
+<header>
+    <div class="container-fluid header-content fixed-top">
+        <div class="row">
+            <div class="col">
+                <div class="float-left header-label">{% if room_name %}
+                    <a class='header-link' href="{% url 'lobby' %}">⮨ {{ room_name }}</a>
+                {% endif %}</div>
+            </div>
+            <div class="col">
+                <div class="logo">
+                    <a class='header-link' href="{% url 'lobby' %}">
+                        <u>NOIR</u>
+                    </a>
+                </div>
+            </div>
+            <div class="col">
+                <div class="float-right header-label">
+                    {% if user.is_authenticated %}
+                        Logged as: {{ user.username }} |
+                        <a class="header-link" href="{% url 'logout' %}">Log out</a>
+                    {% else %}
+                        <a class="header-link" href="{% url 'login' %}">Log in</a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+{% block content %}
+{% endblock %}
+</body>
+</html>

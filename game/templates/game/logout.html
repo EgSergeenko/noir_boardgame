@@ -1,0 +1,15 @@
+{% extends 'game/base.html' %}
+{% block title %}
+    <title>Log out</title>
+{% endblock %}
+{% block content %}
+    <div class="container d-flex justify-content-center align-items-center user-form-container">
+        <form class="user-form" method="post">
+            {% csrf_token %}
+            <h1 class="h3">Log out</h1>
+            <div class="d-flex justify-content-center">
+                <button class="btn btn-primary w-50 m-3" type="submit">Log out</button>
+            </div>
+        </form>
+    </div>
+{% endblock %}

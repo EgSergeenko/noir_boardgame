@@ -16,5 +16,3 @@ class Room:
     def get_players_number(self):
         return len(self.current_players)
 
-    def set_is_full(self, is_full):
-        self.is_full = is_full

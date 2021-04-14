@@ -1,207 +1,243 @@
 main {
-  margin-top: 60px;
+    margin-top: 60px;
 }
 
 .default-font {
-  font-family: "Roboto", sans-serif;
-  user-select: none;
+    font-family: "Roboto", sans-serif;
+    user-select: none;
 }
 
 .header-content {
-  padding: 8px 30px !important;
-  height: 60px;
-  background-color: black;
+    padding: 8px 30px !important;
+    height: 60px;
+    background-color: black;
 }
 
 .header-label {
-  font-size: 28px;
-  color: #f5f5f5;
-  cursor: pointer;
+    font-size: 28px;
+    color: #f5f5f5;
+    cursor: pointer;
 }
 
 .logo {
-  font-size: 32px;
-  color: #f5f5f5;
-  text-align: center;
-  font-weight: bold;
-  line-height: 44px;
-  text-decoration-line: underline;
-  text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    font-size: 32px;
+    color: #f5f5f5;
+    text-align: center;
+    font-weight: bold;
+    line-height: 44px;
+    text-decoration-line: underline;
+    text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
 }
 
 .wrapper {
-  margin: 0 auto;
-  width: 1200px;
+    margin: 0 auto;
+    width: 1200px;
 }
 
 .card-frame {
-  width: 200px;
-  height: 100px;
-  padding: 10px;
-  box-sizing: border-box;
+    width: 200px;
+    height: 100px;
+    padding: 10px;
+    box-sizing: border-box;
 }
 
 .card-wrapper {
-  border-radius: 10px;
-  min-width: 100%;
-  min-height: 100%;
-  box-sizing: border-box;
-  background-color: #9a9a9a;
-  padding: 10px 2px 2px 2px;
-  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    border-radius: 10px;
+    min-width: 100%;
+    min-height: 100%;
+    box-sizing: border-box;
+    background-color: #9a9a9a;
+    padding: 10px 2px 2px 2px;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
 }
 
 .card-inner {
-  border-radius: 8px;
-  min-width: 100%;
-  min-height: 100%;
-  box-sizing: border-box;
-  padding: 25px 15px 7px 15px;
-  background-color: #dcdcdc;
+    border-radius: 8px;
+    min-width: 100%;
+    min-height: 100%;
+    box-sizing: border-box;
+    padding: 25px 15px 7px 15px;
+    background-color: #dcdcdc;
 }
 
 .card-name {
-  border-radius: 5px;
-  background-color: #f5f5f5;
-  min-width: 100%;
-  min-height: 100%;
-  box-sizing: border-box;
-  text-align: center;
-  vertical-align: middle;
-  font-size: 18pt;
+    border-radius: 5px;
+    background-color: #f5f5f5;
+    min-width: 100%;
+    min-height: 100%;
+    box-sizing: border-box;
+    text-align: center;
+    vertical-align: middle;
+    font-size: 18pt;
 }
 
 .selected {
-  background-color: #ffff80;
+    background-color: #ffff80;
 }
 
 .current-player {
-  background-color: #80ff80;
+    background-color: #80ff80;
 }
 
 .flex-block {
-  display: flex !important;
-  flex-wrap: wrap;
+    display: flex !important;
+    flex-wrap: wrap;
 }
 
 .desk {
-  max-width: 1000px;
-  min-width: 1000px;
+    max-width: 1000px;
+    min-width: 1000px;
 }
 
 .vertical-arrows {
-  display: flex !important;
-  margin: 0 100px;
+    display: flex !important;
+    margin: 0 100px;
 }
 
 .horizontal-arrows {
-  display: flex !important;
-  flex-direction: column;
-  width: 100px;
-  align-items: center;
+    display: flex !important;
+    flex-direction: column;
+    width: 100px;
+    align-items: center;
 }
 
 .arrow {
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
     "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji",
     "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
-  font-size: 32pt;
-  text-align: center;
-  color: #9a9a9a;
-  cursor: pointer;
+    font-size: 32pt;
+    text-align: center;
+    color: #9a9a9a;
+    cursor: pointer;
 }
 
 .vertical-arrow {
-  width: 200px;
-  height: 75px;
+    width: 200px;
+    height: 75px;
 }
 
 .horizontal-arrow {
-  height: 100px;
-  width: 75px;
-  padding-top: 20px;
+    height: 100px;
+    width: 75px;
+    padding-top: 20px;
 }
 
 .info-block {
-  background: #ffffff;
-  border: 5px solid #808080;
-  box-sizing: border-box;
-  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
-  border-radius: 30px;
-  min-width: 100%;
-  display: inline-block;
-  margin: 20px;
-  padding: 10px 0px;
+    background: #ffffff;
+    border: 5px solid #808080;
+    box-sizing: border-box;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    border-radius: 30px;
+    min-width: 100%;
+    display: inline-block;
+    margin: 20px;
+    padding: 10px 0px;
 }
 
 .hub-block {
-  background: #ffffff;
-  border: 5px solid #808080;
-  box-sizing: border-box;
-  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
-  border-radius: 30px;
-  min-width: 60%;
-  min-height: 60%;
-  display: inline-block;
-  margin: 20%;
-  padding: 20px 40px;
+    background: #ffffff;
+    border: 5px solid #808080;
+    box-sizing: border-box;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    border-radius: 30px;
+    min-width: 60%;
+    min-height: 60%;
+    display: inline-block;
+    margin: 20%;
+    padding: 20px 40px;
 }
 
 .room-tile {
-  background: #ffffff;
-  border: 3px solid #000000;
-  box-sizing: border-box;
-  border-radius: 20px;
-  margin-bottom: 20px;
-  padding: 5px 10px;
-  font-size: 24px;
-  display: inline-block;
-  min-width: 100%;
+    background: #ffffff;
+    border: 3px solid #000000;
+    box-sizing: border-box;
+    border-radius: 20px;
+    margin-bottom: 20px;
+    padding: 5px 10px;
+    font-size: 24px;
+    display: inline-block;
+    min-width: 100%;
 }
 
 .hub-button {
-  background: #15b5fa;
-  border-radius: 10px;
-  text-align: center;
-  vertical-align: middle;
-  padding: 5px 40px;
-  display: inline-block;
-  font-size: 16px;
+    background: #15b5fa;
+    border-radius: 10px;
+    text-align: center;
+    vertical-align: middle;
+    padding: 5px 40px;
+    display: inline-block;
+    font-size: 16px;
 }
 
 .action-button {
-  background: #15b5fa;
-  border-radius: 10px;
-  width: 60%;
-  margin: 15px 20%;
-  height: 40px;
-  font-size: 24px;
-  text-align: center;
-  vertical-align: middle;
-  cursor: pointer;
+    background: #15b5fa;
+    border-radius: 10px;
+    width: 60%;
+    margin: 15px 20%;
+    height: 40px;
+    font-size: 24px;
+    text-align: center;
+    vertical-align: middle;
+    cursor: pointer;
 }
 
 .player-badge {
-  border-radius: 10px;
-  width: 80%;
-  margin: 10px 10% 20px;
-  padding: 5px 10px;
-  display: inline-block;
-  font-size: 20px;
-  text-align: left;
-  vertical-align: middle;
-  background-color: #dcdcdc;
+    border-radius: 10px;
+    width: 80%;
+    margin: 10px 10% 20px;
+    padding: 5px 10px;
+    display: inline-block;
+    font-size: 20px;
+    text-align: left;
+    vertical-align: middle;
+    background-color: #dcdcdc;
 }
 
 .current-player {
-  color: #1a8309;
+    color: #1a8309;
 }
 
 .turn {
-  width: 80%;
-  margin: 10px 10%;
-  height: 40px;
-  font-size: 24px;
-  text-align: center;
-  vertical-align: middle;
+    width: 80%;
+    margin: 10px 10%;
+    height: 40px;
+    font-size: 24px;
+    text-align: center;
+    vertical-align: middle;
+}
+
+.header-link {
+    color: white;
+}
+
+.header-link:hover {
+    color: white;
+    text-decoration: underline;
+
+}
+
+.header-link:visited {
+    color: white;
+}
+
+.user-form-container {
+    height: 100vh;
+}
+
+.user-form {
+    border: black 3px solid;
+    border-radius: 30px;
+    padding: 40px;
+}
+
+@media (min-width: 1200px) and (max-width: 1799px) {
+    .user-form {
+        width: 35%;
+    }
+}
+
+@media (max-width: 599px) {
+    .user-form {
+        width: 90%;
+    }
 }
