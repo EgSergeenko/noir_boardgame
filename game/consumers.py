@@ -198,7 +198,8 @@ class GameConsumer(WebsocketConsumer):
                 'game_current_player': game.current_player,
                 'previous_move': game.previous_move,
                 'winner': game.winner,
-                'message': message
+                'message': message,
+                'turn_counter': game.turn_counter
             }
         ))
 

@@ -1,6 +1,15 @@
 import random
 from itertools import cycle
 
+
+def increment_turn_counter(turn_func):
+    def wrapper(*args):
+        args[0].turn_counter += 1
+        return turn_func(*args)
+
+    return wrapper
+
+
 NAMES = [
     'Quniton',
     'Geneva',
@@ -45,9 +54,11 @@ class Game:
         self.board = self.__set_up_board(deck)
         self.players_roles = self.__assign_roles(players)
         self.players_scores = self.__set_up_scores(players)
+        self.turn_counter = 1
         self.previous_move = None
         self.winner = None
 
+    @increment_turn_counter
     def interrogate(self, row, column):
         witness, cards = self.__get_adjacent(row, column)
         players = []
@@ -63,6 +74,7 @@ class Game:
         self.previous_move = None
         return message
 
+    @increment_turn_counter
     def catch(self, row, column):
         card = self.board[row][column]['name']
         for player, role in self.players_roles.items():
@@ -84,6 +96,7 @@ class Game:
         self.previous_move = None
         return message
 
+    @increment_turn_counter
     def move(self, direction, idx):
         if direction == 'left':
             self.board[idx] = self.board[idx][1:] + [self.board[idx][0]]
