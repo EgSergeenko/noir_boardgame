@@ -55,7 +55,7 @@ class Game:
         self.players_roles = self.__assign_roles(players)
         self.players_scores = self.__set_up_scores(players)
         self.turn_counter = 1
-        self.previous_move = None
+        self.previous_move = 'default;0;0'
         self.winner = None
 
     @increment_turn_counter
