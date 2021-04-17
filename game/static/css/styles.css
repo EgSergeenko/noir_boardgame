@@ -1,5 +1,6 @@
 main {
     margin-top: 60px;
+    user-select: none;
 }
 
 .default-font {
@@ -74,6 +75,10 @@ main {
 
 .selected {
     background-color: #ffff80;
+}
+
+.caught {
+    background-color: #ff6666;
 }
 
 .current-player {
@@ -192,10 +197,6 @@ main {
     text-align: left;
     vertical-align: middle;
     background-color: #dcdcdc;
-}
-
-.current-player {
-    color: #1a8309;
 }
 
 .turn {

@@ -41,8 +41,10 @@ class GamePage extends React.Component {
     this.startGame = this.startGame.bind(this);
     this.dummyMove = this.dummyMove.bind(this);
     this.state = {
+      yourName: "default",
       actionMod: "shift",
       webSocket: null,
+      players: ["default"],
       gameInfo: {
         board: [
           {
@@ -147,6 +149,10 @@ class GamePage extends React.Component {
           },
         ],
         current_player_role: "1",
+        scores: { default: "0" },
+        game_current_player: "default",
+        turn_counter: "0",
+        previous_move: "",
       },
     };
   }
@@ -186,6 +192,12 @@ class GamePage extends React.Component {
           gameInfo: data,
         });
       }
+      if (data.message_type == "new_player_message") {
+        this.setState({
+          players: data.players,
+          yourName: data.current_player,
+        });
+      }
       console.log(data);
     };
     gameSocket.onclose = (e) => {
@@ -220,7 +232,12 @@ class GamePage extends React.Component {
                   <GameActions changeActionModFunc={this.changeActionMod} />
                 </div>
                 <div className="row">
-                  <PlayersInfo />
+                  <PlayersInfo
+                    players={this.state.players}
+                    scores={this.state.gameInfo.scores}
+                    currentPlayer={this.state.gameInfo.game_current_player}
+                    turn={this.state.gameInfo.turn_counter}
+                  />
                 </div>
               </div>
               <div className="col-md-10">
@@ -229,6 +246,11 @@ class GamePage extends React.Component {
                   currentPlayerRole={this.state.gameInfo.current_player_role}
                   board={this.state.gameInfo.board}
                   webSocket={this.state.webSocket}
+                  active={
+                    this.state.yourName ==
+                    this.state.gameInfo.game_current_player
+                  }
+                  previousMove={this.state.gameInfo.previous_move}
                 />
               </div>
             </div>
@@ -287,12 +309,28 @@ class PlayersInfo extends React.Component {
   }
 
   render() {
+    var scores = new Map(Object.entries(this.props.scores));
     return (
       <div className="info-block">
-        <PlayerBadge nickname="Kavrankaba" score="2" current />
-        <PlayerBadge nickname="Osaverengeka" score="1" />
-        <PlayerBadge nickname="Nikthar" score="2" />
-        <Turn turn="2" />
+        {this.props.players.map((nickname, i) => {
+          if (this.props.currentPlayer == nickname)
+            return (
+              <PlayerBadge
+                key={i}
+                nickname={nickname}
+                score={!!scores.get(nickname) ? scores.get(nickname) : 0}
+                current
+              />
+            );
+          return (
+            <PlayerBadge
+              key={i}
+              nickname={nickname}
+              score={!!scores.get(nickname) ? scores.get(nickname) : 0}
+            />
+          );
+        })}
+        <Turn turn={this.props.turn} />
       </div>
     );
   }
@@ -397,29 +435,39 @@ class Gameboard extends React.Component {
           direction="up"
           onClickFunc={this.handleArrowClick}
           webSocket={this.props.webSocket}
+          active={this.props.active}
+          previousMove={this.props.previousMove}
         />
         <div className="flex-block">
           <HorizontalArrows
             direction="left"
             onClickFunc={this.handleArrowClick}
             webSocket={this.props.webSocket}
+            active={this.props.active}
+            previousMove={this.props.previousMove}
           />
           <NoirCards
             board={this.props.board}
             actionMod={this.props.actionMod}
             currentPlayerRole={this.props.currentPlayerRole}
             webSocket={this.props.webSocket}
+            active={this.props.active}
+            previousMove={this.props.previousMove}
           />
           <HorizontalArrows
             direction="right"
             onClickFunc={this.handleArrowClick}
             webSocket={this.props.webSocket}
+            active={this.props.active}
+            previousMove={this.props.previousMove}
           />
         </div>
         <VerticalArrows
           direction="down"
           onClickFunc={this.handleArrowClick}
           webSocket={this.props.webSocket}
+          active={this.props.active}
+          previousMove={this.props.previousMove}
         />
       </div>
     );
@@ -449,6 +497,8 @@ class HorizontalArrows extends React.Component {
               direction={this.props.direction}
               onClickFunc={this.props.onClickFunc}
               webSocket={this.props.webSocket}
+              active={this.props.active}
+              previousMove={this.props.previousMove}
             />
           );
         })}
@@ -480,6 +530,8 @@ class VerticalArrows extends React.Component {
               direction={this.props.direction}
               onClickFunc={this.props.onClickFunc}
               webSocket={this.props.webSocket}
+              active={this.props.active}
+              previousMove={this.props.previousMove}
             />
           );
         })}
@@ -495,13 +547,28 @@ class HorizontalArrow extends React.Component {
   }
 
   handleClick() {
-    if (this.props.webSocket != null) {
-      this.props.webSocket.send(
-        JSON.stringify({
-          message_type: "turn_message",
-          message: "move;" + this.props.direction + ";" + this.props.localId,
-        })
-      );
+    // var actionParts = this.props.previousMove.split(";");
+    // if (
+    //   !(
+    //     actionParts[0] == "move" &&
+    //     ((actionParts[1] == "up" && this.props.direction == "down") ||
+    //       (actionParts[1] == "down" && this.props.direction == "up") ||
+    //       (actionParts[1] == "left" && this.props.direction == "right") ||
+    //       (actionParts[1] == "right" && this.props.direction == "left")) &&
+    //     actionParts[2] == this.props.localId
+    //   ))
+      {
+      if (
+        this.props.webSocket != null &&
+        this.props.active
+      ) {
+        this.props.webSocket.send(
+          JSON.stringify({
+            message_type: "turn_message",
+            message: "move;" + this.props.direction + ";" + this.props.localId,
+          })
+        );
+      }
     }
     this.props.onClickFunc(this.props.localId, this.props.direction);
   }
@@ -522,13 +589,29 @@ class VerticalArrow extends React.Component {
   }
 
   handleClick() {
-    if (this.props.webSocket != null) {
-      this.props.webSocket.send(
-        JSON.stringify({
-          message_type: "turn_message",
-          message: "move;" + this.props.direction + ";" + this.props.localId,
-        })
-      );
+    // var actionParts = this.props.previousMove.split(";");
+    // if (
+    //   !(
+    //     actionParts[0] == "move" &&
+    //     ((actionParts[1] == "up" && this.props.direction == "down") ||
+    //       (actionParts[1] == "down" && this.props.direction == "up") ||
+    //       (actionParts[1] == "left" && this.props.direction == "right") ||
+    //       (actionParts[1] == "right" && this.props.direction == "left")) &&
+    //     actionParts[2] == this.props.localId
+    //   )
+    // )
+    {
+      if (
+        this.props.webSocket != null &&
+        this.props.active
+      ) {
+        this.props.webSocket.send(
+          JSON.stringify({
+            message_type: "turn_message",
+            message: "move;" + this.props.direction + ";" + this.props.localId,
+          })
+        );
+      }
     }
     this.props.onClickFunc(this.props.localId, this.props.direction);
   }
@@ -548,6 +631,11 @@ class NoirCards extends React.Component {
   }
 
   render() {
+    let yourIndex = this.props.board.findIndex(
+      (info) => info.name == this.props.currentPlayerRole
+    );
+    let yourRow = (yourIndex / 5) | 0;
+    let yourColumn = yourIndex % 5;
     return (
       <div className="desk flex-block">
         {this.props.board.map((info, i) => {
@@ -555,8 +643,13 @@ class NoirCards extends React.Component {
             <NoirCard
               key={i}
               id={i}
+              row={(i / 5) | 0}
+              column={i % 5}
+              yourRow={yourRow}
+              yourColumn={yourColumn}
               name={info.name}
               status={info.status}
+              active={this.props.active}
               webSocket={this.props.webSocket}
               actionMod={this.props.actionMod}
               currentPlayerRole={this.props.currentPlayerRole}
@@ -576,13 +669,13 @@ class NoirCard extends React.Component {
     };
     this.onMouseEnter = this.onMouseEnter.bind(this);
     this.onMouseLeave = this.onMouseLeave.bind(this);
+    this.sendAction = this.sendAction.bind(this);
+    this.isCatchable = this.isCatchable.bind(this);
+    this.isInterrogatable = this.isInterrogatable.bind(this);
   }
 
   onMouseEnter() {
-    if (
-      this.props.actionMod === "interrogate" ||
-      this.props.actionMod === "catch"
-    )
+    if (this.isInterrogatable() || this.isCatchable())
       this.setState({
         frameStyle: "card-frame selected",
       });
@@ -594,6 +687,37 @@ class NoirCard extends React.Component {
     });
   }
 
+  isCatchable() {
+    return (
+      this.props.active &&
+      this.props.actionMod == "catch" &&
+      this.props.name != this.props.currentPlayerRole &&
+      this.props.status != 0 &&
+      Math.abs(this.props.row - this.props.yourRow) <= 1 &&
+      Math.abs(this.props.column - this.props.yourColumn) <= 1
+    );
+  }
+
+  isInterrogatable() {
+    return (
+      this.props.active &&
+      this.props.actionMod == "interrogate" &&
+      this.props.status != 0 &&
+      Math.abs(this.props.row - this.props.yourRow) <= 1 &&
+      Math.abs(this.props.column - this.props.yourColumn) <= 1
+    );
+  }
+
+  sendAction() {
+    var temp = JSON.stringify({
+      message_type: "turn_message",
+      message:
+        this.props.actionMod + ";" + this.props.row + ";" + this.props.column,
+    });
+    console.log(temp);
+    this.props.webSocket.send(temp);
+  }
+
   render() {
     return (
       <div
@@ -602,28 +726,16 @@ class NoirCard extends React.Component {
         onMouseLeave={this.onMouseLeave}
       >
         <div
-          className="card-wrapper"
+          className={
+            this.props.status == 1 ? "card-wrapper" : "card-wrapper caught"
+          }
           onClick={() => {
             if (
               this.props.webSocket != null &&
               this.props.actionMod != "shift"
             ) {
-              if (
-                this.props.actionMod == "catch" &&
-                this.props.name != this.props.currentPlayerRole
-              ) {
-                this.props.webSocket.send(
-                  JSON.stringify({
-                    message_type: "turn_message",
-                    message:
-                      this.props.actionMod +
-                      ";" +
-                      ((this.props.id / 5) | 0) +
-                      ";" +
-                      (this.props.id % 5),
-                  })
-                );
-              }
+              if (this.isCatchable() || this.isInterrogatable())
+                this.sendAction();
             }
           }}
         >
