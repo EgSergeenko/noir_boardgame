@@ -13,8 +13,8 @@
 </head>
 <body>
 <header>
-    <div class="container-fluid header-content fixed-top">
-        <div class="row">
+    <div class="container-fluid header-content">
+        <div class="row d-flex align-items-center">
             <div class="col">
                 <div class="float-left header-label">{% if room_name %}
                     <a class='header-link' href="{% url 'lobby' %}">⮨ {{ room_name }}</a>
@@ -30,7 +30,7 @@
             <div class="col">
                 <div class="float-right header-label">
                     {% if user.is_authenticated %}
-                        Logged as: {{ user.username }} |
+                        {{ user.username }} |
                         <a class="header-link" href="{% url 'logout' %}">Log out</a>
                     {% else %}
                         <a class="header-link" href="{% url 'login' %}">Log in</a>

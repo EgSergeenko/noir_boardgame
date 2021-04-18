@@ -1,158 +1,51 @@
-class HubPage extends React.Component {
-  constructor(props) {
-    super(props);
-  }
-
-  render() {
-    return (
-      <div>
-        <main>
-          <div className="hub-block">
-            <RoomTile roomName="Room 1" />
-            <RoomTile roomName="Room 2" />
-            <RoomTile roomName="Room 3" />
-            <div className="float-left hub-button">Create</div>
-          </div>
-        </main>
-      </div>
-    );
-  }
-}
-
-class RoomTile extends React.Component {
-  constructor(props) {
-    super(props);
-  }
-
-  render() {
-    return (
-      <div className="room-tile">
-        <div className="float-left">{this.props.roomName}</div>
-        <div className="float-right hub-button">Join</div>
-      </div>
-    );
-  }
-}
+const NAMES = [
+  'Quniton',
+  'Geneva',
+  'Trevor',
+  'Simon',
+  'Vladimir',
+  'Yvonne',
+  'Kristoph',
+  'Ernest',
+  'Irma',
+  'Marion',
+  'Ophelia',
+  'Neil',
+  'Barrin',
+  'Wilhelm',
+  'Phoebe',
+  'Zachary',
+  'Horatio',
+  'Deidre',
+  'Alyss',
+  'Clive',
+  'Udstad',
+  'Ryan',
+  'Julian',
+  'Franklin',
+  'Linus'
+]
 
 class GamePage extends React.Component {
   constructor(props) {
     super(props);
     this.changeActionMod = this.changeActionMod.bind(this);
     this.startGame = this.startGame.bind(this);
-    this.dummyMove = this.dummyMove.bind(this);
     this.state = {
       yourName: "default",
       actionMod: "shift",
       webSocket: null,
+      log: [],
       players: ["default"],
       gameInfo: {
-        board: [
-          {
-            name: "1",
-            status: "1",
-          },
-          {
-            name: "2",
-            status: "1",
-          },
-          {
-            name: "3",
-            status: "1",
-          },
-          {
-            name: "4",
-            status: "1",
-          },
-          {
-            name: "5",
-            status: "1",
-          },
-          {
-            name: "6",
-            status: "1",
-          },
-          {
-            name: "7",
-            status: "1",
-          },
-          {
-            name: "8",
-            status: "1",
-          },
-          {
-            name: "9",
-            status: "1",
-          },
-          {
-            name: "10",
-            status: "1",
-          },
-          {
-            name: "11",
-            status: "1",
-          },
-          {
-            name: "12",
-            status: "1",
-          },
-          {
-            name: "13",
-            status: "1",
-          },
-          {
-            name: "14",
-            status: "1",
-          },
-          {
-            name: "15",
-            status: "1",
-          },
-          {
-            name: "16",
-            status: "1",
-          },
-          {
-            name: "17",
-            status: "1",
-          },
-          {
-            name: "18",
-            status: "1",
-          },
-          {
-            name: "19",
-            status: "1",
-          },
-          {
-            name: "20",
-            status: "1",
-          },
-          {
-            name: "21",
-            status: "1",
-          },
-          {
-            name: "22",
-            status: "1",
-          },
-          {
-            name: "23",
-            status: "1",
-          },
-          {
-            name: "24",
-            status: "1",
-          },
-          {
-            name: "25",
-            status: "1",
-          },
-        ],
+        board: NAMES.map(e => {return {name: e, status: 1}}),
         current_player_role: "1",
         scores: { default: "0" },
         game_current_player: "default",
         turn_counter: "0",
-        previous_move: "",
+        previous_move: "default;0;0",
+        message: "",
+        winner: "default",
       },
     };
   }
@@ -163,17 +56,6 @@ class GamePage extends React.Component {
         JSON.stringify({
           message_type: "start_game_message",
           message: "start",
-        })
-      );
-    }
-  }
-
-  dummyMove() {
-    if (this.state.webSocket != null) {
-      this.state.webSocket.send(
-        JSON.stringify({
-          message_type: "turn_message",
-          message: "move;left;0",
         })
       );
     }
@@ -191,12 +73,27 @@ class GamePage extends React.Component {
         this.setState({
           gameInfo: data,
         });
+        this.state.log.push(data.message);
+        this.setState({
+          log: this.state.log,
+        });
       }
       if (data.message_type == "new_player_message") {
         this.setState({
           players: data.players,
           yourName: data.current_player,
         });
+      }
+      if (data.message_type == "player_left_message") {
+        this.setState({
+          players: data.players,
+        });
+      }
+      if (
+        data.message_type == "game_is_ready_message" &&
+        this.state.yourName == this.state.players[0]
+      ) {
+        this.startGame();
       }
       console.log(data);
     };
@@ -223,8 +120,6 @@ class GamePage extends React.Component {
     return (
       <div>
         <main>
-          <button onClick={this.startGame}>start</button>
-          <button onClick={this.dummyMove}>move</button>
           <div className="container-fluid">
             <div className="row">
               <div className="col-md-2">
@@ -239,6 +134,9 @@ class GamePage extends React.Component {
                     turn={this.state.gameInfo.turn_counter}
                   />
                 </div>
+                <div className="row">
+                  <ActionLog log={this.state.log} />
+                </div>
               </div>
               <div className="col-md-10">
                 <Gameboard
@@ -248,7 +146,7 @@ class GamePage extends React.Component {
                   webSocket={this.state.webSocket}
                   active={
                     this.state.yourName ==
-                    this.state.gameInfo.game_current_player
+                    this.state.gameInfo.game_current_player && this.state.gameInfo.winner == null
                   }
                   previousMove={this.state.gameInfo.previous_move}
                 />
@@ -370,62 +268,30 @@ class Turn extends React.Component {
   }
 }
 
+class ActionLog extends React.Component {
+  constructor(props) {
+    super(props);
+  }
+
+  render() {
+    return (
+      <div className="info-block action-log">
+        {this.props.log.map((l, i) => {
+          return (
+            <div key={i}>
+              {l}
+              <br />
+            </div>
+          );
+        })}
+      </div>
+    );
+  }
+}
+
 class Gameboard extends React.Component {
   constructor(props) {
     super(props);
-    this.handleArrowClick = this.handleArrowClick.bind(this);
-    this.state = {
-      cardsInfo: Array(25)
-        .fill()
-        .map((e, i) => i + 1),
-    };
-  }
-
-  handleArrowClick(arrowId, direction) {
-    if (direction == "up") {
-      this.setState({
-        cardsInfo: this.state.cardsInfo.map((info, i, arr) => {
-          if (i % 5 == arrowId) {
-            return arr[(i + 5) % 25];
-          } else {
-            return info;
-          }
-        }),
-      });
-    }
-    if (direction == "left") {
-      this.setState({
-        cardsInfo: this.state.cardsInfo.map((info, i, arr) => {
-          if (((i / 5) | 0) == arrowId) {
-            return arr[arrowId * 5 + ((i + 1) % 5)];
-          } else {
-            return info;
-          }
-        }),
-      });
-    }
-    if (direction == "down") {
-      this.setState({
-        cardsInfo: this.state.cardsInfo.map((info, i, arr) => {
-          if (i % 5 == arrowId) {
-            return arr[(i + 20) % 25];
-          } else {
-            return info;
-          }
-        }),
-      });
-    }
-    if (direction == "right") {
-      this.setState({
-        cardsInfo: this.state.cardsInfo.map((info, i, arr) => {
-          if (((i / 5) | 0) == arrowId) {
-            return arr[arrowId * 5 + ((i + 4) % 5)];
-          } else {
-            return info;
-          }
-        }),
-      });
-    }
   }
 
   render() {
@@ -483,7 +349,6 @@ class HorizontalArrows extends React.Component {
     let arrowIds = Array(5)
       .fill()
       .map((e, i) => i);
-
     return (
       <div className="horizontal-arrows">
         {arrowIds.map((id) => {
@@ -516,7 +381,6 @@ class VerticalArrows extends React.Component {
     let arrowIds = Array(5)
       .fill()
       .map((e, i) => i);
-
     return (
       <div className="vertical-arrows">
         {arrowIds.map((id) => {
@@ -547,21 +411,20 @@ class HorizontalArrow extends React.Component {
   }
 
   handleClick() {
-    // var actionParts = this.props.previousMove.split(";");
-    // if (
-    //   !(
-    //     actionParts[0] == "move" &&
-    //     ((actionParts[1] == "up" && this.props.direction == "down") ||
-    //       (actionParts[1] == "down" && this.props.direction == "up") ||
-    //       (actionParts[1] == "left" && this.props.direction == "right") ||
-    //       (actionParts[1] == "right" && this.props.direction == "left")) &&
-    //     actionParts[2] == this.props.localId
-    //   ))
-      {
-      if (
-        this.props.webSocket != null &&
-        this.props.active
-      ) {
+    var actionParts =
+      this.props.previousMove == null
+        ? ["default;0"]
+        : this.props.previousMove.split(";");
+    if (
+      !(
+        ((actionParts[0] == "up" && this.props.direction == "down") ||
+          (actionParts[0] == "down" && this.props.direction == "up") ||
+          (actionParts[0] == "left" && this.props.direction == "right") ||
+          (actionParts[0] == "right" && this.props.direction == "left")) &&
+        actionParts[1] == this.props.localId
+      )
+    ) {
+      if (this.props.webSocket != null && this.props.active) {
         this.props.webSocket.send(
           JSON.stringify({
             message_type: "turn_message",
@@ -570,7 +433,6 @@ class HorizontalArrow extends React.Component {
         );
       }
     }
-    this.props.onClickFunc(this.props.localId, this.props.direction);
   }
 
   render() {
@@ -589,22 +451,20 @@ class VerticalArrow extends React.Component {
   }
 
   handleClick() {
-    // var actionParts = this.props.previousMove.split(";");
-    // if (
-    //   !(
-    //     actionParts[0] == "move" &&
-    //     ((actionParts[1] == "up" && this.props.direction == "down") ||
-    //       (actionParts[1] == "down" && this.props.direction == "up") ||
-    //       (actionParts[1] == "left" && this.props.direction == "right") ||
-    //       (actionParts[1] == "right" && this.props.direction == "left")) &&
-    //     actionParts[2] == this.props.localId
-    //   )
-    // )
-    {
-      if (
-        this.props.webSocket != null &&
-        this.props.active
-      ) {
+    var actionParts =
+      this.props.previousMove == null
+        ? ["default;0"]
+        : this.props.previousMove.split(";");
+    if (
+      !(
+        ((actionParts[0] == "up" && this.props.direction == "down") ||
+          (actionParts[0] == "down" && this.props.direction == "up") ||
+          (actionParts[0] == "left" && this.props.direction == "right") ||
+          (actionParts[0] == "right" && this.props.direction == "left")) &&
+        actionParts[1] == this.props.localId
+      )
+    ) {
+      if (this.props.webSocket != null && this.props.active) {
         this.props.webSocket.send(
           JSON.stringify({
             message_type: "turn_message",
@@ -613,7 +473,6 @@ class VerticalArrow extends React.Component {
         );
       }
     }
-    this.props.onClickFunc(this.props.localId, this.props.direction);
   }
 
   render() {
@@ -642,7 +501,6 @@ class NoirCards extends React.Component {
           return (
             <NoirCard
               key={i}
-              id={i}
               row={(i / 5) | 0}
               column={i % 5}
               yourRow={yourRow}
@@ -744,7 +602,7 @@ class NoirCard extends React.Component {
               className={
                 "card-name" +
                 (this.props.currentPlayerRole == this.props.name
-                  ? " current-player"
+                  ? " your-card"
                   : "")
               }
             >
