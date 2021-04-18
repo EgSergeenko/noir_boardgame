@@ -6,7 +6,7 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-var NAMES = ['Quniton', 'Geneva', 'Trevor', 'Simon', 'Vladimir', 'Yvonne', 'Kristoph', 'Ernest', 'Irma', 'Marion', 'Ophelia', 'Neil', 'Barrin', 'Wilhelm', 'Phoebe', 'Zachary', 'Horatio', 'Deidre', 'Alyss', 'Clive', 'Udstad', 'Ryan', 'Julian', 'Franklin', 'Linus'];
+var NAMES = ["Quniton", "Geneva", "Trevor", "Simon", "Vladimir", "Yvonne", "Kristoph", "Ernest", "Irma", "Marion", "Ophelia", "Neil", "Barrin", "Wilhelm", "Phoebe", "Zachary", "Horatio", "Deidre", "Alyss", "Clive", "Udstad", "Ryan", "Julian", "Franklin", "Linus"];
 
 var GamePage = function (_React$Component) {
   _inherits(GamePage, _React$Component);
@@ -41,7 +41,7 @@ var GamePage = function (_React$Component) {
   }
 
   _createClass(GamePage, [{
-    key: 'startGame',
+    key: "startGame",
     value: function startGame() {
       if (this.state.webSocket != null) {
         this.state.webSocket.send(JSON.stringify({
@@ -51,7 +51,7 @@ var GamePage = function (_React$Component) {
       }
     }
   }, {
-    key: 'componentDidMount',
+    key: "componentDidMount",
     value: function componentDidMount() {
       var _this2 = this;
 
@@ -62,7 +62,8 @@ var GamePage = function (_React$Component) {
         var data = JSON.parse(e.data);
         if (data.message_type == "game_info_message") {
           _this2.setState({
-            gameInfo: data
+            gameInfo: data,
+            actionMod: "shift"
           });
           _this2.state.log.push(data.message);
           _this2.setState({
@@ -93,7 +94,7 @@ var GamePage = function (_React$Component) {
       });
     }
   }, {
-    key: 'changeActionMod',
+    key: "changeActionMod",
     value: function changeActionMod(newMode) {
       if (this.state.actionMod === newMode) this.setState({
         actionMod: "shift"
@@ -102,31 +103,34 @@ var GamePage = function (_React$Component) {
       });
     }
   }, {
-    key: 'render',
+    key: "render",
     value: function render() {
       return React.createElement(
-        'div',
+        "div",
         null,
         React.createElement(
-          'main',
+          "main",
           null,
           React.createElement(
-            'div',
-            { className: 'container-fluid' },
+            "div",
+            { className: "container-fluid" },
             React.createElement(
-              'div',
-              { className: 'row' },
+              "div",
+              { className: "row" },
               React.createElement(
-                'div',
-                { className: 'col-md-2' },
+                "div",
+                { className: "col-md-2" },
                 React.createElement(
-                  'div',
-                  { className: 'row' },
-                  React.createElement(GameActions, { changeActionModFunc: this.changeActionMod })
+                  "div",
+                  { className: "row" },
+                  React.createElement(GameActions, {
+                    changeActionModFunc: this.changeActionMod,
+                    actionMod: this.state.actionMod
+                  })
                 ),
                 React.createElement(
-                  'div',
-                  { className: 'row' },
+                  "div",
+                  { className: "row" },
                   React.createElement(PlayersInfo, {
                     players: this.state.players,
                     scores: this.state.gameInfo.scores,
@@ -135,14 +139,14 @@ var GamePage = function (_React$Component) {
                   })
                 ),
                 React.createElement(
-                  'div',
-                  { className: 'row' },
+                  "div",
+                  { className: "row" },
                   React.createElement(ActionLog, { log: this.state.log })
                 )
               ),
               React.createElement(
-                'div',
-                { className: 'col-md-10' },
+                "div",
+                { className: "col-md-10" },
                 React.createElement(Gameboard, {
                   actionMod: this.state.actionMod,
                   currentPlayerRole: this.state.gameInfo.current_player_role,
@@ -172,19 +176,21 @@ var GameActions = function (_React$Component2) {
   }
 
   _createClass(GameActions, [{
-    key: 'render',
+    key: "render",
     value: function render() {
       return React.createElement(
-        'div',
-        { className: 'info-block' },
+        "div",
+        { className: "info-block" },
         React.createElement(GameActionButton, {
-          content: 'Interrogate',
-          actionMod: 'interrogate',
+          content: "Interrogate",
+          actionMod: "interrogate",
+          currentActionMod: this.props.actionMod,
           changeActionModFunc: this.props.changeActionModFunc
         }),
         React.createElement(GameActionButton, {
-          content: 'Catch',
-          actionMod: 'catch',
+          content: "Catch",
+          actionMod: "catch",
+          currentActionMod: this.props.actionMod,
           changeActionModFunc: this.props.changeActionModFunc
         })
       );
@@ -207,16 +213,19 @@ var GameActionButton = function (_React$Component3) {
   }
 
   _createClass(GameActionButton, [{
-    key: 'changeActionMod',
+    key: "changeActionMod",
     value: function changeActionMod() {
       this.props.changeActionModFunc(this.props.actionMod);
     }
   }, {
-    key: 'render',
+    key: "render",
     value: function render() {
       return React.createElement(
-        'div',
-        { className: 'action-button', onClick: this.changeActionMod },
+        "div",
+        {
+          className: this.props.actionMod == this.props.currentActionMod ? "action-button active-button" : "action-button",
+          onClick: this.changeActionMod
+        },
         this.props.content
       );
     }
@@ -235,14 +244,14 @@ var PlayersInfo = function (_React$Component4) {
   }
 
   _createClass(PlayersInfo, [{
-    key: 'render',
+    key: "render",
     value: function render() {
       var _this6 = this;
 
       var scores = new Map(Object.entries(this.props.scores));
       return React.createElement(
-        'div',
-        { className: 'info-block' },
+        "div",
+        { className: "info-block" },
         this.props.players.map(function (nickname, i) {
           if (_this6.props.currentPlayer == nickname) return React.createElement(PlayerBadge, {
             key: i,
@@ -274,15 +283,15 @@ var PlayerBadge = function (_React$Component5) {
   }
 
   _createClass(PlayerBadge, [{
-    key: 'render',
+    key: "render",
     value: function render() {
       return React.createElement(
-        'div',
+        "div",
         {
           className: "player-badge" + (this.props.current ? " current-player" : " ")
         },
         this.props.nickname,
-        React.createElement('br', null),
+        React.createElement("br", null),
         "Score: " + this.props.score
       );
     }
@@ -301,13 +310,13 @@ var Turn = function (_React$Component6) {
   }
 
   _createClass(Turn, [{
-    key: 'render',
+    key: "render",
     value: function render() {
       return React.createElement(
-        'div',
-        { className: 'turn' },
+        "div",
+        { className: "turn" },
         React.createElement(
-          'b',
+          "b",
           null,
           "Turn: " + this.props.turn
         )
@@ -328,17 +337,17 @@ var ActionLog = function (_React$Component7) {
   }
 
   _createClass(ActionLog, [{
-    key: 'render',
+    key: "render",
     value: function render() {
       return React.createElement(
-        'div',
-        { className: 'info-block action-log' },
+        "section",
+        { className: "info-block action-log" },
         this.props.log.map(function (l, i) {
           return React.createElement(
-            'div',
-            { key: i },
+            "div",
+            { key: i, className: i % 2 == 1 ? "dark-stripe" : "white-stripe" },
             l,
-            React.createElement('br', null)
+            React.createElement("br", null)
           );
         })
       );
@@ -358,23 +367,23 @@ var Gameboard = function (_React$Component8) {
   }
 
   _createClass(Gameboard, [{
-    key: 'render',
+    key: "render",
     value: function render() {
       return React.createElement(
-        'div',
-        { className: 'container-fluid' },
+        "div",
+        { className: "container-fluid" },
         React.createElement(VerticalArrows, {
-          direction: 'up',
+          direction: "up",
           onClickFunc: this.handleArrowClick,
           webSocket: this.props.webSocket,
           active: this.props.active,
           previousMove: this.props.previousMove
         }),
         React.createElement(
-          'div',
-          { className: 'flex-block' },
+          "div",
+          { className: "flex-block" },
           React.createElement(HorizontalArrows, {
-            direction: 'left',
+            direction: "left",
             onClickFunc: this.handleArrowClick,
             webSocket: this.props.webSocket,
             active: this.props.active,
@@ -389,7 +398,7 @@ var Gameboard = function (_React$Component8) {
             previousMove: this.props.previousMove
           }),
           React.createElement(HorizontalArrows, {
-            direction: 'right',
+            direction: "right",
             onClickFunc: this.handleArrowClick,
             webSocket: this.props.webSocket,
             active: this.props.active,
@@ -397,7 +406,7 @@ var Gameboard = function (_React$Component8) {
           })
         ),
         React.createElement(VerticalArrows, {
-          direction: 'down',
+          direction: "down",
           onClickFunc: this.handleArrowClick,
           webSocket: this.props.webSocket,
           active: this.props.active,
@@ -420,7 +429,7 @@ var HorizontalArrows = function (_React$Component9) {
   }
 
   _createClass(HorizontalArrows, [{
-    key: 'render',
+    key: "render",
     value: function render() {
       var _this12 = this;
 
@@ -428,13 +437,13 @@ var HorizontalArrows = function (_React$Component9) {
         return i;
       });
       return React.createElement(
-        'div',
-        { className: 'horizontal-arrows' },
+        "div",
+        { className: "horizontal-arrows" },
         arrowIds.map(function (id) {
           return React.createElement(HorizontalArrow, {
             key: id,
             localId: id,
-            symbol: _this12.props.direction == "right" ? '\uD83E\uDC46' : '\uD83E\uDC44',
+            symbol: _this12.props.direction == "right" ? "\uD83E\uDC46" : "\uD83E\uDC44",
             direction: _this12.props.direction,
             onClickFunc: _this12.props.onClickFunc,
             webSocket: _this12.props.webSocket,
@@ -459,7 +468,7 @@ var VerticalArrows = function (_React$Component10) {
   }
 
   _createClass(VerticalArrows, [{
-    key: 'render',
+    key: "render",
     value: function render() {
       var _this14 = this;
 
@@ -467,13 +476,13 @@ var VerticalArrows = function (_React$Component10) {
         return i;
       });
       return React.createElement(
-        'div',
-        { className: 'vertical-arrows' },
+        "div",
+        { className: "vertical-arrows" },
         arrowIds.map(function (id) {
           return React.createElement(VerticalArrow, {
             key: id,
             localId: id,
-            symbol: _this14.props.direction == "down" ? '\uD83E\uDC47' : '\uD83E\uDC45',
+            symbol: _this14.props.direction == "down" ? "\uD83E\uDC47" : "\uD83E\uDC45",
             direction: _this14.props.direction,
             onClickFunc: _this14.props.onClickFunc,
             webSocket: _this14.props.webSocket,
@@ -501,7 +510,7 @@ var HorizontalArrow = function (_React$Component11) {
   }
 
   _createClass(HorizontalArrow, [{
-    key: 'handleClick',
+    key: "handleClick",
     value: function handleClick() {
       var actionParts = this.props.previousMove == null ? ["default;0"] : this.props.previousMove.split(";");
       if (!((actionParts[0] == "up" && this.props.direction == "down" || actionParts[0] == "down" && this.props.direction == "up" || actionParts[0] == "left" && this.props.direction == "right" || actionParts[0] == "right" && this.props.direction == "left") && actionParts[1] == this.props.localId)) {
@@ -514,11 +523,11 @@ var HorizontalArrow = function (_React$Component11) {
       }
     }
   }, {
-    key: 'render',
+    key: "render",
     value: function render() {
       return React.createElement(
-        'div',
-        { className: 'arrow horizontal-arrow', onClick: this.handleClick },
+        "div",
+        { className: "arrow horizontal-arrow", onClick: this.handleClick },
         this.props.symbol
       );
     }
@@ -540,7 +549,7 @@ var VerticalArrow = function (_React$Component12) {
   }
 
   _createClass(VerticalArrow, [{
-    key: 'handleClick',
+    key: "handleClick",
     value: function handleClick() {
       var actionParts = this.props.previousMove == null ? ["default;0"] : this.props.previousMove.split(";");
       if (!((actionParts[0] == "up" && this.props.direction == "down" || actionParts[0] == "down" && this.props.direction == "up" || actionParts[0] == "left" && this.props.direction == "right" || actionParts[0] == "right" && this.props.direction == "left") && actionParts[1] == this.props.localId)) {
@@ -553,11 +562,11 @@ var VerticalArrow = function (_React$Component12) {
       }
     }
   }, {
-    key: 'render',
+    key: "render",
     value: function render() {
       return React.createElement(
-        'div',
-        { className: 'arrow vertical-arrow', onClick: this.handleClick },
+        "div",
+        { className: "arrow vertical-arrow", onClick: this.handleClick },
         this.props.symbol
       );
     }
@@ -576,7 +585,7 @@ var NoirCards = function (_React$Component13) {
   }
 
   _createClass(NoirCards, [{
-    key: 'render',
+    key: "render",
     value: function render() {
       var _this18 = this;
 
@@ -586,8 +595,8 @@ var NoirCards = function (_React$Component13) {
       var yourRow = yourIndex / 5 | 0;
       var yourColumn = yourIndex % 5;
       return React.createElement(
-        'div',
-        { className: 'desk flex-block' },
+        "div",
+        { className: "desk flex-block" },
         this.props.board.map(function (info, i) {
           return React.createElement(NoirCard, {
             key: i,
@@ -630,31 +639,31 @@ var NoirCard = function (_React$Component14) {
   }
 
   _createClass(NoirCard, [{
-    key: 'onMouseEnter',
+    key: "onMouseEnter",
     value: function onMouseEnter() {
       if (this.isInterrogatable() || this.isCatchable()) this.setState({
         frameStyle: "card-frame selected"
       });
     }
   }, {
-    key: 'onMouseLeave',
+    key: "onMouseLeave",
     value: function onMouseLeave() {
       this.setState({
         frameStyle: "card-frame"
       });
     }
   }, {
-    key: 'isCatchable',
+    key: "isCatchable",
     value: function isCatchable() {
       return this.props.active && this.props.actionMod == "catch" && this.props.name != this.props.currentPlayerRole && this.props.status != 0 && Math.abs(this.props.row - this.props.yourRow) <= 1 && Math.abs(this.props.column - this.props.yourColumn) <= 1;
     }
   }, {
-    key: 'isInterrogatable',
+    key: "isInterrogatable",
     value: function isInterrogatable() {
       return this.props.active && this.props.actionMod == "interrogate" && this.props.status != 0 && Math.abs(this.props.row - this.props.yourRow) <= 1 && Math.abs(this.props.column - this.props.yourColumn) <= 1;
     }
   }, {
-    key: 'sendAction',
+    key: "sendAction",
     value: function sendAction() {
       var temp = JSON.stringify({
         message_type: "turn_message",
@@ -664,19 +673,19 @@ var NoirCard = function (_React$Component14) {
       this.props.webSocket.send(temp);
     }
   }, {
-    key: 'render',
+    key: "render",
     value: function render() {
       var _this20 = this;
 
       return React.createElement(
-        'div',
+        "div",
         {
           className: this.state.frameStyle,
           onMouseEnter: this.onMouseEnter,
           onMouseLeave: this.onMouseLeave
         },
         React.createElement(
-          'div',
+          "div",
           {
             className: this.props.status == 1 ? "card-wrapper" : "card-wrapper caught",
             onClick: function onClick() {
@@ -686,10 +695,10 @@ var NoirCard = function (_React$Component14) {
             }
           },
           React.createElement(
-            'div',
-            { className: 'card-inner' },
+            "div",
+            { className: "card-inner" },
             React.createElement(
-              'div',
+              "div",
               {
                 className: "card-name" + (this.props.currentPlayerRole == this.props.name ? " your-card" : "")
               },

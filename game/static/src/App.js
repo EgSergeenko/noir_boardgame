@@ -1,30 +1,30 @@
 const NAMES = [
-  'Quniton',
-  'Geneva',
-  'Trevor',
-  'Simon',
-  'Vladimir',
-  'Yvonne',
-  'Kristoph',
-  'Ernest',
-  'Irma',
-  'Marion',
-  'Ophelia',
-  'Neil',
-  'Barrin',
-  'Wilhelm',
-  'Phoebe',
-  'Zachary',
-  'Horatio',
-  'Deidre',
-  'Alyss',
-  'Clive',
-  'Udstad',
-  'Ryan',
-  'Julian',
-  'Franklin',
-  'Linus'
-]
+  "Quniton",
+  "Geneva",
+  "Trevor",
+  "Simon",
+  "Vladimir",
+  "Yvonne",
+  "Kristoph",
+  "Ernest",
+  "Irma",
+  "Marion",
+  "Ophelia",
+  "Neil",
+  "Barrin",
+  "Wilhelm",
+  "Phoebe",
+  "Zachary",
+  "Horatio",
+  "Deidre",
+  "Alyss",
+  "Clive",
+  "Udstad",
+  "Ryan",
+  "Julian",
+  "Franklin",
+  "Linus",
+];
 
 class GamePage extends React.Component {
   constructor(props) {
@@ -38,7 +38,9 @@ class GamePage extends React.Component {
       log: [],
       players: ["default"],
       gameInfo: {
-        board: NAMES.map(e => {return {name: e, status: 1}}),
+        board: NAMES.map((e) => {
+          return { name: e, status: 1 };
+        }),
         current_player_role: "1",
         scores: { default: "0" },
         game_current_player: "default",
@@ -72,6 +74,7 @@ class GamePage extends React.Component {
       if (data.message_type == "game_info_message") {
         this.setState({
           gameInfo: data,
+          actionMod: "shift",
         });
         this.state.log.push(data.message);
         this.setState({
@@ -124,7 +127,10 @@ class GamePage extends React.Component {
             <div className="row">
               <div className="col-md-2">
                 <div className="row">
-                  <GameActions changeActionModFunc={this.changeActionMod} />
+                  <GameActions
+                    changeActionModFunc={this.changeActionMod}
+                    actionMod={this.state.actionMod}
+                  />
                 </div>
                 <div className="row">
                   <PlayersInfo
@@ -146,7 +152,8 @@ class GamePage extends React.Component {
                   webSocket={this.state.webSocket}
                   active={
                     this.state.yourName ==
-                    this.state.gameInfo.game_current_player && this.state.gameInfo.winner == null
+                      this.state.gameInfo.game_current_player &&
+                    this.state.gameInfo.winner == null
                   }
                   previousMove={this.state.gameInfo.previous_move}
                 />
@@ -170,11 +177,13 @@ class GameActions extends React.Component {
         <GameActionButton
           content="Interrogate"
           actionMod="interrogate"
+          currentActionMod={this.props.actionMod}
           changeActionModFunc={this.props.changeActionModFunc}
         />
         <GameActionButton
           content="Catch"
           actionMod="catch"
+          currentActionMod={this.props.actionMod}
           changeActionModFunc={this.props.changeActionModFunc}
         />
       </div>
@@ -194,7 +203,14 @@ class GameActionButton extends React.Component {
 
   render() {
     return (
-      <div className="action-button" onClick={this.changeActionMod}>
+      <div
+        className={
+          this.props.actionMod == this.props.currentActionMod
+            ? "action-button active-button"
+            : "action-button"
+        }
+        onClick={this.changeActionMod}
+      >
         {this.props.content}
       </div>
     );
@@ -275,16 +291,16 @@ class ActionLog extends React.Component {
 
   render() {
     return (
-      <div className="info-block action-log">
+      <section className="info-block action-log">
         {this.props.log.map((l, i) => {
           return (
-            <div key={i}>
+            <div key={i} className={i % 2 == 1 ? "dark-stripe" : "white-stripe"}>
               {l}
               <br />
             </div>
           );
         })}
-      </div>
+      </section>
     );
   }
 }
