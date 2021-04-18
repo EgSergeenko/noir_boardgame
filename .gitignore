@@ -139,4 +139,6 @@ cython_debug/
 
 
 game/static/node_modules/
-db.sqlite3
+/db.sqlite3
+/ngrok.exe
+/desktop.ini

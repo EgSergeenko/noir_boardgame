@@ -69,7 +69,7 @@ class Game:
                         players.append(player)
 
         message = f'{self.current_player} interrogates {witness["name"]}.' \
-                  f' {"He/she saw nothing" if len(players) == 0 else "Players nearby: " + " ,".join(players)}.'
+                  f' {"He/she saw nothing" if len(players) == 0 else "Players nearby: " + ", ".join(players)}.'
         self.current_player = next(self.players_order)
         self.previous_move = None
         return message
