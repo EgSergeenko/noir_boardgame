@@ -112,7 +112,10 @@ class Game:
             for i in range(len(self.board) - 2, -1, -1):
                 self.board[i + 1][idx] = self.board[i][idx]
             self.board[0][idx] = tmp
-        message = f'{self.current_player} moves the board.'
+        if direction == 'up' or direction == 'down':
+            message = f'{self.current_player} moves the {idx + 1} column {direction}.'
+        else:
+            message = f'{self.current_player} moves the {idx + 1} row {direction}.'
         self.previous_move = f'{direction};{idx}'
         self.current_player = next(self.players_order)
         return message

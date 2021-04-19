@@ -36,7 +36,7 @@ class GameConsumer(WebsocketConsumer):
                 self.channel_name,
                 {
                     'type': 'game_info_message',
-                    'message': 'reconnect',
+                    'message': 'You successfully reconnected!',
                 }
             )
 
