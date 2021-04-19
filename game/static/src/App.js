@@ -453,7 +453,9 @@ class HorizontalArrow extends React.Component {
 
     render() {
         return (
-            <div className="arrow horizontal-arrow" onClick={this.handleClick}>
+            <div
+                className={this.props.active === true ? "arrow horizontal-arrow enabled-arrow" : "arrow horizontal-arrow"}
+                onClick={this.handleClick}>
                 {this.props.symbol}
             </div>
         );
@@ -493,7 +495,7 @@ class VerticalArrow extends React.Component {
 
     render() {
         return (
-            <div className="arrow vertical-arrow" onClick={this.handleClick}>
+            <div className={this.props.active === true ? "arrow vertical-arrow enabled-arrow" : "arrow vertical-arrow"} onClick={this.handleClick}>
                 {this.props.symbol}
             </div>
         );

@@ -527,7 +527,9 @@ var HorizontalArrow = function (_React$Component11) {
         value: function render() {
             return React.createElement(
                 "div",
-                { className: "arrow horizontal-arrow", onClick: this.handleClick },
+                {
+                    className: this.props.active === true ? "arrow horizontal-arrow enabled-arrow" : "arrow horizontal-arrow",
+                    onClick: this.handleClick },
                 this.props.symbol
             );
         }
@@ -566,7 +568,7 @@ var VerticalArrow = function (_React$Component12) {
         value: function render() {
             return React.createElement(
                 "div",
-                { className: "arrow vertical-arrow", onClick: this.handleClick },
+                { className: this.props.active === true ? "arrow vertical-arrow enabled-arrow" : "arrow vertical-arrow", onClick: this.handleClick },
                 this.props.symbol
             );
         }

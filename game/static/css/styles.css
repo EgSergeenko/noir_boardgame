@@ -74,6 +74,7 @@ main {
 
 .selected {
     background-color: #ffff80;
+    border-radius: 10px;
 }
 
 .caught {
@@ -120,6 +121,11 @@ main {
     cursor: pointer;
 }
 
+.enabled-arrow:hover {
+    color: black;
+}
+
+
 .vertical-arrow {
     width: 200px;
     height: 75px;
@@ -157,6 +163,7 @@ main {
 .white-stripe {
     padding: 0 0 0 5px;
 }
+
 .dark-stripe {
     background-color: #cccccc;
     border-radius: 2px;
@@ -164,19 +171,28 @@ main {
 }
 
 .action-button {
-    background: #15b5fa;
+    background: #007bff;
     border-radius: 10px;
     width: 60%;
     margin: 15px 20%;
     height: 40px;
     font-size: 24px;
+    color: white;
     text-align: center;
     vertical-align: middle;
     cursor: pointer;
 }
 
+.action-button:hover {
+    background: #0069d9;
+}
+
+
 .active-button {
-    border: 4px solid #ffff80;
+    background: #0069d9;
+    -webkit-box-shadow: inset 0px 0px 10px #565762;
+    -moz-box-shadow: inset 0px 0px 10px #565762;
+    box-shadow: inset 0px 0px 10px #565762;
 }
 
 .player-badge {
