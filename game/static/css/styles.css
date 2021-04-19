@@ -231,7 +231,7 @@ main {
 }
 
 .user-form-container {
-    height: 100vh;
+    height: 90vh;
 }
 
 .user-form {
@@ -240,15 +240,29 @@ main {
     padding: 40px;
 }
 
-@media (min-width: 1200px) and (max-width: 1799px) {
+@media (min-width: 1200px) {
     .user-form {
         width: 35%;
     }
 }
 
-@media (max-width: 599px) {
+@media (min-width: 1600px) {
+    .user-form {
+        width: 45%;
+        font-size: 22px;
+    }
+}
+
+@media (min-width: 1600px) {
+    .user-form > h3 {
+        font-size: 40px;
+    }
+}
+
+@media (max-width: 550px) {
     .user-form {
         width: 90%;
+        font-size: 15px;
     }
 }
 
@@ -271,4 +285,11 @@ main {
 
 ::-webkit-scrollbar-thumb:hover {
     background: #555;
+}
+
+@media (min-width: 1600px) {
+    .lobby-content {
+        font-size: 23px;
+        min-width: 80%;
+    }
 }

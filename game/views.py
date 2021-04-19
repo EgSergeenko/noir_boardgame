@@ -35,7 +35,7 @@ def lobby(request):
         if not request.user.is_authenticated:
             return redirect('/login/')
         room_name = request.POST.get('room_name')
-        players_number = int(request.POST.get('players_number'))
+        players_number = int(request.POST.get('players_number')[0])
         current_rooms = cache.get_or_set('rooms', {}, None)
         if room_name in current_rooms.keys():
             exists = True
@@ -87,7 +87,6 @@ def signup(request):
         username = request.POST.get('username')
         password = request.POST.get('password')
         password_confirmation = request.POST.get('password_confirmation')
-        print(password, password_confirmation)
         if password_confirmation != password:
             passwords_mismatch = True
             return render(request, 'game/signup.html',

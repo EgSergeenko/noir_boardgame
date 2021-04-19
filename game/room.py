@@ -1,3 +1,7 @@
+import time
+from django.core.cache import cache
+
+
 class Room:
 
     def __init__(self, name, expected_players_number):
@@ -6,6 +10,7 @@ class Room:
         self.current_players = []
         self.is_full = False
         self.is_started = False
+        self.created_at = time.time()
 
     def add_player(self, player):
         self.current_players.append(player)
@@ -15,4 +20,3 @@ class Room:
 
     def get_players_number(self):
         return len(self.current_players)
-

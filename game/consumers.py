@@ -202,6 +202,14 @@ class GameConsumer(WebsocketConsumer):
                 'turn_counter': game.turn_counter
             }
         ))
+        if game.winner is not None:
+            games = cache.get('games')
+            games.pop(game.name)
+            cache.set('games', games, None)
+
+            rooms = cache.get('rooms')
+            rooms.pop(self.room_name)
+            cache.set('rooms', rooms, None)
 
     def player_left_message(self, event):
         message_type = event['type']

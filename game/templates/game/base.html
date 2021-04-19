@@ -28,10 +28,15 @@
                 </div>
             </div>
             <div class="col">
-                <div class="float-right header-label">
+                <div class="float-right header-label d-flex">
                     {% if user.is_authenticated %}
                         {{ user.username }} |
-                        <a class="header-link" href="{% url 'logout' %}">Log out</a>
+                        <form method="post" action="{% url 'logout' %}">
+                            {% csrf_token %}
+                            <button style="background: none; border: none" type="submit">
+                                <a class="header-link">Log out</a>
+                            </button>
+                        </form>
                     {% else %}
                         <a class="header-link" href="{% url 'login' %}">Log in</a>
                     {% endif %}
