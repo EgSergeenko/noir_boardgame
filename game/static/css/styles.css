@@ -13,14 +13,8 @@ main {
     background-color: black;
 }
 
-.header-label {
-    font-size: 24px;
-    color: #f5f5f5;
-    cursor: pointer;
-}
 
 .logo {
-    font-size: 32px;
     color: #f5f5f5;
     text-align: center;
     font-weight: bold;
@@ -190,11 +184,17 @@ main {
     padding: 10px 15px;
     font-size: small;
     font-weight: bold;
-    height: 40vh;
     overflow-y: auto;
     z-index: 10;
     display: flex;
     flex-direction: column-reverse;
+    height: 20vh;
+}
+
+@media (min-width: 2000px) {
+    .action-log {
+        font-size: 20px;
+    }
 }
 
 .white-stripe {
@@ -252,9 +252,49 @@ main {
     vertical-align: middle;
 }
 
+.header-label {
+    font-size: 2.5vh;
+    color: #f5f5f5;
+    cursor: pointer;
+}
+
 .header-link {
     color: white;
+    font-size: 3vh;
 }
+
+button > .header-link {
+    font-size: 2.5vh;
+}
+
+@media (max-width: 600px) {
+    .header-link {
+        font-size: 2vh;
+    }
+
+    button > .header-link {
+        font-size: 1.1vh;
+    }
+
+    .header-label {
+        font-size: 1.1vh;
+    }
+}
+
+@media (max-width: 750px) and (min-width: 601px) {
+    .header-link {
+        font-size: 2vh;
+    }
+
+    button > .header-link {
+        font-size: 1.5vh;
+    }
+
+    .header-label {
+        font-size: 1.5vh;
+    }
+}
+
 
 .header-link:hover {
     color: white;

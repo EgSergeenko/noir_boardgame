@@ -13,8 +13,8 @@
 </head>
 <body>
 <header>
-    <div class="container-fluid header-content">
-        <div class="row d-flex align-items-center">
+    <div class="container-fluid header-content d-flex align-items-center">
+        <div class="w-100 row d-flex align-items-center justify-content-around">
             <div class="col">
                 <div class="float-left header-label">{% if room_name %}
                     <a class='header-link' href="{% url 'lobby' %}">⮨ {{ room_name }}</a>
@@ -30,8 +30,8 @@
             <div class="col">
                 <div class="float-right header-label d-flex">
                     {% if user.is_authenticated %}
-                        {{ user.username }} |
                         <form method="post" action="{% url 'logout' %}">
+                            {{ user.username }} |
                             {% csrf_token %}
                             <button style="background: none; border: none" type="submit">
                                 <a class="header-link">Log out</a>

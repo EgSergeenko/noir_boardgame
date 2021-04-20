@@ -22,6 +22,8 @@ def room(request, room_name):
             return render(request, 'game/gamePage.html', {
                 'room_name': room_name
             })
+    if username in current_room.current_players:
+        return redirect('lobby/')
     if current_room.is_full and username not in current_room.current_players:
         return redirect('lobby/')
     return render(request, 'game/gamePage.html', {
@@ -51,7 +53,6 @@ def lobby(request):
         return redirect(f'/{room_name}')
 
     current_rooms = cache.get_or_set('rooms', {}, None)
-    print(current_rooms)
     return render(request, 'game/lobby.html',
                   context={'current_rooms': current_rooms, 'exists': exists})
 
