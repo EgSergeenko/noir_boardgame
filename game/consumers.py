@@ -11,17 +11,25 @@ class GameConsumer(WebsocketConsumer):
         self.room_name = self.scope['url_route']['kwargs']['room_name']
         self.room_group_name = f'game_{self.room_name}'
 
+        current_rooms = cache.get('rooms')
+        if self.room_name in current_rooms.keys():
+            current_room = current_rooms[self.room_name]
+        else:
+            self.close()
+            return
+        username = self.scope['user'].username
+
+        if self.scope['user'].is_anonymous or username in current_room.current_players:
+            self.close()
+            return
+
+        current_room.add_player(username)
+        players = current_room.current_players
+
         async_to_sync(self.channel_layer.group_add)(
             self.room_group_name,
             self.channel_name
         )
-
-        current_rooms = cache.get('rooms')
-        current_room = current_rooms[self.room_name]
-        username = self.scope['user'].username
-
-        current_room.add_player(username)
-        players = current_room.current_players
 
         async_to_sync(self.channel_layer.group_send)(
             self.room_group_name,
@@ -57,7 +65,8 @@ class GameConsumer(WebsocketConsumer):
         current_rooms = cache.get('rooms')
         current_room = current_rooms[self.room_name]
         username = self.scope['user'].username
-        current_room.remove_player(username)
+        if username in current_room.current_players:
+            current_room.remove_player(username)
         if current_room.is_full and not current_room.is_started:
             current_room.is_full = False
             self.game_is_not_ready()
@@ -105,30 +114,31 @@ class GameConsumer(WebsocketConsumer):
             games = cache.get('games')
             game = games[self.room_name]
 
-            action, x, y = message.split(';')
-            if action == 'move':
-                direction = x
-                idx = int(y)
-                message = game.move(direction, idx)
-            elif action == 'catch':
-                row = int(x)
-                column = int(y)
-                message = game.catch(row, column)
-            else:
-                row = int(x)
-                column = int(y)
-                message = game.interrogate(row, column)
+            if game.current_player == self.scope['user'].username:
+                action, x, y = message.split(';')
+                if action == 'move':
+                    direction = x
+                    idx = int(y)
+                    message = game.move(direction, idx)
+                elif action == 'catch':
+                    row = int(x)
+                    column = int(y)
+                    message = game.catch(row, column)
+                else:
+                    row = int(x)
+                    column = int(y)
+                    message = game.interrogate(row, column)
 
-            games[self.room_name] = game
-            cache.set('games', games, None)
+                games[self.room_name] = game
+                cache.set('games', games, None)
 
-            async_to_sync(self.channel_layer.group_send)(
-                self.room_group_name,
-                {
-                    'type': 'game_info_message',
-                    'message': message,
-                }
-            )
+                async_to_sync(self.channel_layer.group_send)(
+                    self.room_group_name,
+                    {
+                        'type': 'game_info_message',
+                        'message': message,
+                    }
+                )
 
     def new_player_message(self, event):
         players = event['players']
