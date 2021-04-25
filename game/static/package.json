@@ -3,7 +3,9 @@
   "version": "1.0.0",
   "main": "app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "parcel ../templates/game/gamePage.html ../templates/game/base.html",
+    "build": "parcel build --public-url ./ ../templates/game/gamePage.html"
   },
   "keywords": [],
   "author": "",
@@ -12,5 +14,8 @@
     "babel-cli": "^6.26.0",
     "babel-preset-react-app": "^3.1.2"
   },
-  "description": ""
+  "description": "",
+  "devDependencies": {
+    "parcel-bundler": "^1.12.5"
+  }
 }
