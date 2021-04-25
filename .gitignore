@@ -139,6 +139,9 @@ cython_debug/
 
 
 game/static/node_modules/
+game/static/dist/
+game/static/*.js
+game/static/*.js.map
 /db.sqlite3
 /ngrok.exe
 /desktop.ini
